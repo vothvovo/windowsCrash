@@ -1,8 +1,30 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-void main() {
-  runApp(const MyApp());
+import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:isar/isar.dart';
+import 'package:windowscrash/isar_text_field.dart';
+import 'package:windowscrash/text_field.dart';
+
+late final Isar isar;
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Isar.initializeIsarCore(download: true);
+
+  final Directory isarDir = await getApplicationDocumentsDirectory();
+
+  isar = await Isar.open(
+    [IsarTextFieldSchema],
+  );
+
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
+
+getApplicationDocumentsDirectory() {}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -95,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const TextField(),
+            const TextFieldWidget(),
             const Text(
               'You have pushed the button this many times:',
             ),
